@@ -21,7 +21,7 @@ namespace DocAnalyzerAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            IdentityModelEventSource.ShowPII = true;
+            //IdentityModelEventSource.ShowPII = true;
             
             services.AddControllers();
             services.AddSwaggerGen(c =>
@@ -29,6 +29,7 @@ namespace DocAnalyzerAPI
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "DocAnalyzerAPI", Version = "v1" });
             });
 
+            /**
             // accepts any access token issued by identity server
             services.AddAuthentication("Bearer")
                 .AddJwtBearer("Bearer", options =>
@@ -50,7 +51,7 @@ namespace DocAnalyzerAPI
                     policy.RequireAuthenticatedUser();
                     policy.RequireClaim("scope", "api1");
                 });
-            });
+            });**/
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -63,13 +64,13 @@ namespace DocAnalyzerAPI
             app.UseRouting();
 
             app.UseHttpsRedirection();
-            app.UseAuthentication();
-            app.UseAuthorization();
+            //app.UseAuthentication();
+            //app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers()
-                .RequireAuthorization("ApiScope"); ;
+                endpoints.MapControllers();
+                //.RequireAuthorization("ApiScope"); ;
             });
         }
     }
