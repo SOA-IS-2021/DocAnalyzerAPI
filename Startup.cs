@@ -11,6 +11,9 @@ namespace DocAnalyzerAPI
 {
     public class Startup
     {
+        
+        readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+        
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -24,6 +27,19 @@ namespace DocAnalyzerAPI
             //IdentityModelEventSource.ShowPII = true;
             
             services.AddControllers();
+            
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: MyAllowSpecificOrigins,
+                    builder =>
+                    {
+                        builder.WithOrigins(
+                            "http://localhost",
+                            "http://*:*",
+                            "https://*:*");
+                    });
+            });
+            
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "DocAnalyzerAPI", Version = "v1" });
@@ -66,7 +82,7 @@ namespace DocAnalyzerAPI
             app.UseHttpsRedirection();
             //app.UseAuthentication();
             //app.UseAuthorization();
-
+            app.UseCors(MyAllowSpecificOrigins);
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
